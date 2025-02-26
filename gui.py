@@ -16,9 +16,9 @@ with ui.card(align_items='end').classes('no-shadow border-[1px]').classes('fixed
         ui.label('Atalho para catalogação de livros').style('color: #6E93D6; font-size: 200%; font-weight: 500')
         autocomplete_options = ['admin', 'biblioteca']
         ui.input(label="Usuário", autocomplete=autocomplete_options)
-        ui.input(label="Senha", password_toggle_button=True).props("size=15")
+        ui.input(label="Senha").props("size=15")
 
         ui.button('BUTTON', on_click=lambda: ui.notify('button was pressed'))
 
 
-ui.run(port=5555, title="Catalogação")
+ui.run(port=5555, title="Catalogação", native=True, reload=False)
