@@ -10,21 +10,36 @@ from time import sleep
 
 def FormataNome(nome):
 
-    aux = nome.split(' ')
+    if(len(nome.split(' ')) == 1):
+            return nome
 
-    if(len(aux) == 1):
-        return nome
+    lista = nome.split(',')
+    novo_nome = ""
+    for nome in lista:
 
-    final = len(aux) - 1
+        if nome[0] == " ":
+            nome = nome[1:]
 
-    inicio = aux[final]
-    del(aux[final])
+        aux = nome.split(' ')
 
-    resto = " ".join(aux)
+        if(len(aux) == 1):
+            return nome
 
-    novo_nome = inicio + ', ' + resto
+        final = len(aux) - 1
 
-    return novo_nome
+        if aux[final].lower() == "filho" or aux[final].lower() == "junior":
+            inicio = aux[final-1] + " " + aux[final]
+            del(aux[final])
+            del(aux[final - 1])
+        else: 
+            inicio = aux[final]
+            del(aux[final])
+
+        resto = " ".join(aux)
+
+        novo_nome = novo_nome + "; " + inicio + ', ' + resto
+
+    return novo_nome[2:]
 
 def CodigoAutor(nome, cutter):
 
@@ -61,17 +76,16 @@ def inicia_cutter():
 
 def inicia_driver():
 
-    options = Options()
-    options.add_argument("--headless=new")
+    #options = Options()
+    #options.add_argument("--headless=new")
 
     service_driver = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=service_driver, options=options)
+    driver = webdriver.Chrome(service=service_driver) #, options=options)
 
     # uncomment this line and comment the above to see the browser
     #driver = webdriver.Chrome()
 
     return driver
-
 
 #driver.implicitly_wait(0.5)
 
@@ -156,7 +170,7 @@ def novo_registro_func(nome, titul, codigo, classif, exemp, volume_n, driver):
     codigo_autor = driver.find_element(By.XPATH, '/html/body/form/div[3]/div[2]/div[2]/div[1]/div[5]/div[2]/div[2]/div/div[11]/fieldset/div[2]/div[2]/div[2]/input')
     codigo_autor.send_keys(codigo)
 
-    if(int(volume_n) > 1):
+    if(int(volume_n) >= 1):
         volume = driver.find_element(By.XPATH, '/html/body/form/div[3]/div[2]/div[2]/div[1]/div[5]/div[2]/div[2]/div/div[11]/fieldset/div[2]/div[3]/div[2]/input')
         volume.send_keys(volume_n)
 
@@ -166,8 +180,12 @@ def novo_registro_func(nome, titul, codigo, classif, exemp, volume_n, driver):
     titulo = driver.find_element(By.XPATH, '/html/body/form/div[3]/div[2]/div[2]/div[1]/div[5]/div[2]/div[2]/div/div[20]/fieldset/div[2]/div[3]/div[2]/input')
     titulo.send_keys(titul)
 
+    sleep(3)
+
     exemplares = driver.find_element(By.XPATH, '/html/body/form/div[3]/div[2]/div[2]/div[1]/div[5]/div[2]/div[4]/div/fieldset/div[1]/div[2]/input')
     exemplares.send_keys(exemp)
+
+    sleep(3)
 
     salvar_registro = driver.find_element(By.XPATH, '/html/body/form/div[3]/div[2]/div[2]/div[1]/div[5]/div[3]/div[2]/a[1]')
     salvar_registro.click()    
