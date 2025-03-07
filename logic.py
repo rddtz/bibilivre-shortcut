@@ -44,8 +44,7 @@ def FormataNome(nome):
 def CodigoAutor(nome, cutter):
 
     cutter.get('https://www.tabelacutter.com/?e=' + nome.split(',')[0] +'&c=')
-    codigo = cutter.find_element(By.XPATH, '/html/body/div[1]/div/div[1]/div/div/form/div[1]/div/span[2]').text
-
+    codigo = cutter.find_element(By.XPATH, '//*[@id="cutterSpan"]').text
     return codigo
 
 def CodigoLivro(codigo, titulo):
@@ -67,20 +66,24 @@ def CodigoLivro(codigo, titulo):
 
 def inicia_cutter():
 
+    service_cutter = Service(ChromeDriverManager().install())
+
     options = Options()
     options.add_argument("--headless=new")
 
-    service_cutter = Service(ChromeDriverManager().install())
+    
     cutter = webdriver.Chrome(service=service_cutter, options=options)
+    
     return cutter
 
 def inicia_driver():
 
-    #options = Options()
-    #options.add_argument("--headless=new")
-
     service_driver = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=service_driver) #, options=options)
+
+    options = Options()
+    options.add_argument("--headless=new")
+
+    driver = webdriver.Chrome(service=service_driver, options=options)
 
     # uncomment this line and comment the above to see the browser
     #driver = webdriver.Chrome()
